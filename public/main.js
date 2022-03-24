@@ -57,9 +57,43 @@ function generateRandomAnimal() {
 }
 
 function onLoad() {
-    var animal = generateRandomAnimal();
+    var animal = JSON.parse(localStorage.getItem("savedAnimal"));
+
+    var hasSavedAnimal = false;
+
+    var currentAnimals = [];
+
+    if (animal === null) {
+        document.getElementById("save-button").innerHTML = "Save Me";
+
+        var animal = generateRandomAnimal();
+    } else {
+        document.getElementById("save-button").innerHTML = "Clear Animal";
+
+        hasSavedAnimal = true;
+    }
+
     document.getElementById("animal").src = animal.image;
     document.getElementById("animal").alt = animal.image_alt;
     document.getElementById("name").innerHTML = animal.name;
     document.getElementById("age").innerHTML = animal.age;
+
+    document.getElementById("save-button").addEventListener("click", function() {
+        if (hasSavedAnimal) {
+            localStorage.removeItem("savedAnimal");
+            
+            document.getElementById("save-button").style.display = "none";
+            document.getElementById("feedback-msg").innerHTML = "Cleared!";
+
+            
+        } else {
+            localStorage.setItem("savedAnimal", JSON.stringify(animal));
+            JSON.parse(localStorage.getItem("savedAnimal"));
+
+            document.getElementById("save-button").style.display = "none";
+            document.getElementById("feedback-msg").innerHTML = "Saved!";
+
+        }
+        
+    });
   }
